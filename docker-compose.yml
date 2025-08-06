@@ -1,0 +1,14 @@
+services:
+  short-url:
+    build: .
+    ports:
+      - "8087:8087"
+    container_name: short-url
+    volumes:
+      - ./data:/data
+      - ./config.prod.yaml:/root/config.yaml  # 挂载生产配置
+    environment:
+      # 环境变量会覆盖配置文件
+      - SERVER_GIN_MODE=release
+      - DATABASE_DSN=/data/shorturls.db
+    restart: unless-stopped

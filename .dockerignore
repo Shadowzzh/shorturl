@@ -1,0 +1,8 @@
+tmp/
+docs/
+.git/
+.gitignore
+README.md
+CLAUDE.md
+*.log
+.air.toml
