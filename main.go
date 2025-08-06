@@ -5,11 +5,18 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"short-url/config"
 	"short-url/database"
 	"short-url/handlers"
 )
 
 func main() {
+	// 初始化配置
+	config.Init()
+
+	// 设置 Gin 模式
+	gin.SetMode(config.AppConfig.Server.GinMode)
+
 	database.Init()
 	r := gin.Default()
 
@@ -20,5 +27,5 @@ func main() {
 	r.POST("/shorten", handlers.CreateShortURL)
 	r.GET("/:id", handlers.RedirectToOrigin)
 
-	r.Run(":8080")
+	r.Run(":" + config.AppConfig.Server.Port)
 }

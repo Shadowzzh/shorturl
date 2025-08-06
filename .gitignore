@@ -51,4 +51,5 @@ short-url
 .env
 
 *.db
-shorturls.db
+
+*.prod.yaml
