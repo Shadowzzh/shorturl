@@ -47,3 +47,8 @@ pids
 
 # Built application
 short-url
+
+.env
+
+*.db
+shorturls.db
