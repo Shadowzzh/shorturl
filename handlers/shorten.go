@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"short-url/config"
 	"short-url/models"
 	"short-url/services"
 
@@ -34,7 +35,7 @@ func CreateShortURL(c *gin.Context) {
 		"msg":  "Short URL created successfully",
 		"data": gin.H{
 			"id":        shortURL.ID,
-			"short_url": "http://localhost:8080/" + shortURL.ID,
+			"short_url": config.AppConfig.Server.Domain + shortURL.ID,
 		},
 	})
 }

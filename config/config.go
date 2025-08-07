@@ -13,6 +13,7 @@ type Config struct {
 
 type ServerConfig struct {
 	Port    string `mapstructure:"port"`
+	Domain  string `mapstructure:"domain"`
 	GinMode string `mapstructure:"gin_mode"`
 }
 
