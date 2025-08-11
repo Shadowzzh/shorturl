@@ -2,6 +2,7 @@ package config
 
 import (
 	"log"
+	"strings"
 
 	"github.com/spf13/viper"
 )
@@ -9,6 +10,14 @@ import (
 type Config struct {
 	Server   ServerConfig   `mapstructure:"server"`
 	Database DatabaseConfig `mapstructure:"database"`
+	Redis    RedisConfig    `mapstructure:"redis"`
+}
+
+type RedisConfig struct {
+	Host     string `mapstructure:"host"`
+	Port     string `mapstructure:"port"`
+	Password string `mapstructure:"password"`
+	DB       int    `mapstructure:"db"`
 }
 
 type ServerConfig struct {
@@ -33,6 +42,8 @@ func Init() {
 	// 设置默认值
 	setDefaults()
 
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+
 	// 自动从环境变量读取
 	viper.AutomaticEnv()
 
@@ -47,11 +58,23 @@ func Init() {
 	if err := viper.Unmarshal(&AppConfig); err != nil {
 		log.Fatalf("Unable to decode config: %v", err)
 	}
+	
+	// 调试输出
+	log.Printf("Final config - Database DSN: %s", AppConfig.Database.DSN)
+	log.Printf("Viper get database.dsn: %s", viper.GetString("database.dsn"))
+	log.Printf("Viper get DATABASE_DSN: %s", viper.GetString("DATABASE_DSN"))
 }
 
 func setDefaults() {
 	viper.SetDefault("server.port", "3001")
 	viper.SetDefault("server.gin_mode", "debug")
+
 	viper.SetDefault("database.driver", "sqlite")
 	viper.SetDefault("database.dsn", "shorturls.db")
+
+	// redis
+	viper.SetDefault("redis.host", "localhost")
+	viper.SetDefault("redis.port", "6397")
+	viper.SetDefault("redis.password", "")
+	viper.SetDefault("redis.db", 0)
 }

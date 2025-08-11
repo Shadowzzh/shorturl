@@ -1,6 +1,8 @@
 package services
 
 import (
+	"context"
+	"encoding/json"
 	"short-url/database"
 	"short-url/models"
 	"short-url/utils"
@@ -44,6 +46,32 @@ func GetShortURL(id string) (*models.ShortURL, error) {
 	}
 
 	return &shortURL, nil
+}
+
+func GetFromCache(id string) (*models.ShortURL, error) {
+	ctx := context.Background()
+
+	jsonStr, err := database.RedisClient.Get(ctx, id).Result()
+	if err != nil {
+		return nil, err
+	}
+
+	var shortURL models.ShortURL
+	err = json.Unmarshal([]byte(jsonStr), &shortURL)
+
+	return &shortURL, err
+}
+
+func CacheShortURL(shortURL *models.ShortURL) error {
+	ctx := context.Background()
+
+	jsonData, err := json.Marshal(shortURL)
+	if err != nil {
+		return err
+	}
+
+	err = database.RedisClient.Set(ctx, shortURL.ID, jsonData, 24*time.Hour).Err()
+	return err
 }
 
 func UpdateVisitStats(id string) error {

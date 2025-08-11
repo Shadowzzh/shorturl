@@ -15,13 +15,20 @@ func RedirectToOrigin(c *gin.Context) {
 		return
 	}
 
-	shortURL, err := services.GetShortURL(shortID)
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"code": 404,
-			"msg":  "Short URL not found",
-		})
+	shortURL, err := services.GetFromCache(shortID)
+
+	if err == nil {
+		c.Redirect(http.StatusFound, shortURL.OriginalURL)
 		return
+	} else {
+		shortURL, err = services.GetShortURL(shortID)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{
+				"code": 404,
+				"msg":  "Short URL not found",
+			})
+			return
+		}
 	}
 
 	go services.UpdateVisitStats(shortID)

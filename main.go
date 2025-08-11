@@ -18,6 +18,8 @@ func main() {
 	gin.SetMode(config.AppConfig.Server.GinMode)
 
 	database.Init()
+	database.InitRedis()
+
 	r := gin.Default()
 
 	r.GET("/ping", func(c *gin.Context) {

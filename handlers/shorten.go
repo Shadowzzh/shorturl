@@ -30,6 +30,8 @@ func CreateShortURL(c *gin.Context) {
 		return
 	}
 
+	services.CacheShortURL(shortURL)
+
 	c.JSON(http.StatusOK, gin.H{
 		"code": 200,
 		"msg":  "Short URL created successfully",

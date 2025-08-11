@@ -38,7 +38,7 @@ RUN mkdir -p /data
 
 # 设置环境变量
 ENV SERVER_GIN_MODE=release
-ENV SERVER_PORT=8080
+ENV SERVER_PORT=8087
 
 # 暴露端口
 EXPOSE 8087
