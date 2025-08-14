@@ -21,7 +21,16 @@ func Init() {
 		panic("failed to connect database: " + err.Error())
 	}
 
-	DB.AutoMigrate(&models.ShortURL{})
+	modelsToMigrate := []interface{}{
+		&models.ShortURL{},
+		&models.Session{},
+		&models.VisitRecord{},
+		&models.GeoLocation{},
+	}
+
+	if err := DB.AutoMigrate(modelsToMigrate...); err != nil {
+		panic("failed to migrate models: " + err.Error())
+	}
 
 	fmt.Println("Database initialized successfully")
 }
