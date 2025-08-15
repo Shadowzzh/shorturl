@@ -4,8 +4,8 @@ server:
   domain: "localhost:3001/"
 
 database:
-  driver: "sqlite"
-  dsn: "shorturls.db"
+  driver: "postgres"
+  dsn: "host=localhost user=zhangziheng  dbname=shorturl port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 
 redis:
   host: "localhost"

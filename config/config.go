@@ -69,8 +69,8 @@ func setDefaults() {
 	viper.SetDefault("server.port", "3001")
 	viper.SetDefault("server.gin_mode", "debug")
 
-	viper.SetDefault("database.driver", "sqlite")
-	viper.SetDefault("database.dsn", "shorturls.db")
+	viper.SetDefault("database.driver", "postgres")
+	viper.SetDefault("database.dsn", "host=localhost user=postgres password=postgres dbname=shorturl port=5432 sslmode=disable TimeZone=Asia/Shanghai")
 
 	// redis
 	viper.SetDefault("redis.host", "localhost")

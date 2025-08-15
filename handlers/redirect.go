@@ -8,16 +8,16 @@ import (
 )
 
 func RedirectToOrigin(c *gin.Context) {
-	shortID := c.Param("id")
-	if shortID == "ping" || shortID == "shorten" || shortID == "info" {
+	shortCode := c.Param("id")
+	if shortCode == "ping" || shortCode == "shorten" || shortCode == "info" {
 		c.Next()
 		return
 	}
 
-	shortURL, err := services.GetFromCache(shortID)
+	shortURL, err := services.GetFromCache(shortCode)
 
 	if err != nil {
-		shortURL, err = services.GetShortURL(shortID)
+		shortURL, err = services.GetShortURL(shortCode)
 		if err != nil {
 			c.JSON(http.StatusNotFound, gin.H{
 				"code": 404,
@@ -42,10 +42,10 @@ func RedirectToOrigin(c *gin.Context) {
 	}
 
 	if geoLocation != nil && session != nil {
-		services.GetOrCreateVisitRecord(session.ID, shortID, &geoLocation.ID)
+		services.GetOrCreateVisitRecord(session.ID, shortCode, &geoLocation.ID)
 	}
 
-	go services.UpdateVisitStats(shortID)
+	go services.UpdateVisitStats(shortCode)
 
 	c.Redirect(http.StatusFound, shortURL.OriginalURL)
 }
