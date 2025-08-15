@@ -15,6 +15,7 @@ import (
 	"short-url/database"
 	"short-url/handlers"
 	"short-url/models"
+	"short-url/utils"
 )
 
 // 集成测试 - 测试完整的请求响应流程，包括真实的数据库操作
@@ -115,7 +116,8 @@ func TestRedirectIntegration(t *testing.T) {
 
 	// 先创建一个短网址
 	shortURL := models.ShortURL{
-		ID:          "test123",
+		ID:          utils.SnowflakeNode.Generate().Int64(),
+		Code:        "test123",
 		OriginalURL: "https://example.com",
 	}
 	database.DB.Create(&shortURL)

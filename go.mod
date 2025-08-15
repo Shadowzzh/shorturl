@@ -3,8 +3,8 @@ module short-url
 go 1.24.4
 
 require (
+	github.com/bwmarrin/snowflake v0.3.0
 	github.com/gin-gonic/gin v1.10.1
-	github.com/google/uuid v1.6.0
 	github.com/redis/go-redis/v9 v9.12.0
 	github.com/spf13/viper v1.20.1
 	github.com/stretchr/testify v1.10.0
@@ -13,7 +13,6 @@ require (
 )
 
 require (
-	github.com/bwmarrin/snowflake v0.3.0 // indirect
 	github.com/bytedance/sonic v1.11.6 // indirect
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect

@@ -6,6 +6,7 @@ import (
 	"short-url/database"
 	"short-url/models"
 	"short-url/utils"
+	"strconv"
 	"strings"
 	"time"
 
@@ -25,7 +26,8 @@ func CreateShortURL(originUrl string) (*models.ShortURL, error) {
 	}
 
 	shortURL := models.ShortURL{
-		ID:          utils.GenerateShortID(),
+		ID:          utils.SnowflakeNode.Generate().Int64(),
+		Code:        utils.GenerateShortID(),
 		VisitCount:  0,
 		OriginalURL: originUrl,
 		CreatedAt:   time.Now(),
@@ -70,7 +72,7 @@ func CacheShortURL(shortURL *models.ShortURL) error {
 		return err
 	}
 
-	err = database.RedisClient.Set(ctx, shortURL.ID, jsonData, 24*time.Hour).Err()
+	err = database.RedisClient.Set(ctx, strconv.FormatInt(shortURL.ID, 10), jsonData, 24*time.Hour).Err()
 	return err
 }
 

@@ -58,7 +58,7 @@ func Init() {
 	if err := viper.Unmarshal(&AppConfig); err != nil {
 		log.Fatalf("Unable to decode config: %v", err)
 	}
-	
+
 	// 调试输出
 	log.Printf("Final config - Database DSN: %s", AppConfig.Database.DSN)
 	log.Printf("Viper get database.dsn: %s", viper.GetString("database.dsn"))

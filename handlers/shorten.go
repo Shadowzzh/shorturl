@@ -37,7 +37,7 @@ func CreateShortURL(c *gin.Context) {
 		"msg":  "Short URL created successfully",
 		"data": gin.H{
 			"id":        shortURL.ID,
-			"short_url": config.AppConfig.Server.Domain + shortURL.ID,
+			"short_url": config.AppConfig.Server.Domain + shortURL.Code,
 		},
 	})
 }
