@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/bwmarrin/snowflake"
 	"github.com/gin-gonic/gin"
 
 	"short-url/config"
@@ -19,6 +21,19 @@ func main() {
 
 	database.Init()
 	database.InitRedis()
+
+	// Create a new Node with a Node number of 1
+	node, err := snowflake.NewNode(1)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// Generate a snowflake ID.
+	id := node.Generate()
+
+	// Print out the ID in a few different ways.
+	fmt.Printf("Int64  ID: %d\n", id)
 
 	r := gin.Default()
 

@@ -4,6 +4,8 @@ import (
 	"crypto/rand"
 	"math/big"
 	"strings"
+
+	"github.com/bwmarrin/snowflake"
 )
 
 const base62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -21,3 +23,5 @@ func GenerateShortID() string {
 
 	return b.String()
 }
+
+var SnowflakeNode, _ = snowflake.NewNode(1)

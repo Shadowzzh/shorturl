@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"short-url/database"
 	"short-url/models"
+	"short-url/utils"
 	"time"
 
 	"gorm.io/gorm"
@@ -52,6 +53,7 @@ func GetOrCreateGeoLocation(ip string) (*models.GeoLocation, error) {
 	}
 
 	geoLocation := models.GeoLocation{
+		ID:          utils.SnowflakeNode.Generate().Int64(),
 		Ip:          raw.Query,
 		Country:     raw.Country,
 		CountryCode: raw.CountryCode,
@@ -92,6 +94,7 @@ func GetOrCreateSession(ip string, userAgent string) (*models.Session, error) {
 	}
 
 	session := &models.Session{
+		ID:         utils.SnowflakeNode.Generate().Int64(),
 		IP:         ip,
 		UserAgent:  userAgent,
 		VisitCount: 1,
@@ -106,8 +109,9 @@ func GetOrCreateSession(ip string, userAgent string) (*models.Session, error) {
 	return session, nil
 }
 
-func GetOrCreateVisitRecord(sessionID uint, shortURLID string, geoLocationId *uint) (*models.VisitRecord, error) {
+func GetOrCreateVisitRecord(sessionID int64, shortURLID string, geoLocationId *int64) (*models.VisitRecord, error) {
 	visitRecord := &models.VisitRecord{
+		ID:            utils.SnowflakeNode.Generate().Int64(),
 		SessionID:     sessionID,
 		ShortURLID:    shortURLID,
 		GeoLocationId: geoLocationId,
