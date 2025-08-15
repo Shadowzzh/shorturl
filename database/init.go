@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
 	"short-url/config"
@@ -15,9 +15,7 @@ var DB *gorm.DB
 func Init() {
 	var err error
 
-	dialector := postgres.Open(config.AppConfig.Database.DSN)
-
-	DB, err = gorm.Open(dialector, &gorm.Config{})
+	DB, err = gorm.Open(sqlite.Open(config.AppConfig.Database.DSN), &gorm.Config{})
 
 	if err != nil {
 		panic("failed to connect database: " + err.Error())
