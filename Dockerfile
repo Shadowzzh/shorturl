@@ -26,12 +26,10 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates sqlite
 
 # 创建工作目录
-WORKDIR /root/
+WORKDIR /app
 
-# 从构建阶段复制可执行文件和配置文件
+# 从构建阶段复制可执行文件
 COPY --from=builder /app/main .
-COPY --from=builder /app/config.yaml .
-COPY --from=builder /app/config.prod.yaml .
 
 # 创建数据库目录
 RUN mkdir -p /data

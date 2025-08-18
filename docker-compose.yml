@@ -1,14 +1,38 @@
 services:
+  redis:
+    image: redis:7.4-alpine
+    container_name: short-url-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 3s
+      retries: 5
+
   short-url:
     build: .
     ports:
       - "8087:8087"
     container_name: short-url
+    depends_on:
+      redis:
+        condition: service_healthy
     volumes:
-      - ./data:/data
-      - ./config.prod.yaml:/root/config.yaml  # 挂载生产配置
+      - data:/data
+      - ./config.prod.yaml:/app/config.yaml  # 挂载生产配置
     environment:
       # 环境变量会覆盖配置文件
       - SERVER_GIN_MODE=release
       - DATABASE_DSN=/data/shorturls.db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     restart: unless-stopped
+
+volumes:
+  redis_data:
+  data:
