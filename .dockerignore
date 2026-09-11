@@ -1,0 +1,41 @@
+# 构建产物
+tmp/
+short-url
+*.log
+
+# 开发工具配置
+.git/
+.gitignore
+.air.toml
+
+# 文档
+README.md
+
+# 测试文件
+tests/
+*_test.go
+
+# 数据文件
+*.db
+data/
+
+# IDE 配置
+.vscode/
+.idea/
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# Docker 与部署相关（构建镜像不需要）
+docker-compose.yml
+Dockerfile
+.dockerignore
+deploy/
+.env
+.env.example
+
+# Raycast 客户端：与 Go 后端构建无关，且含 node_modules（上百 MB），
+# 必须排除，否则每次 docker build 都要把整个 node_modules 传进构建上下文
+raycast-extension/
+node_modules/

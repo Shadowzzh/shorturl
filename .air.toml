@@ -1,0 +1,84 @@
+#  Air 热重载配置文件
+
+#  项目根目录
+root = "."
+#  测试数据目录
+testdata_dir = "testdata"
+#  临时文件目录
+tmp_dir = "tmp"
+
+[build]
+#  传递给二进制文件的参数
+args_bin = []
+#  编译后的二进制文件路径
+bin = "./tmp/main"
+#  构建命令
+cmd = "go build -o ./tmp/main ."
+#  文件更改后延迟重新构建的时间（毫秒）
+delay = 1000
+#  排除监听的目录
+exclude_dir = ["assets", "tmp", "vendor", "testdata"]
+#  排除监听的文件
+exclude_file = []
+#  排除监听的文件正则表达式
+exclude_regex = ["_test.go"]
+#  是否排除未更改的文件
+exclude_unchanged = false
+#  是否跟随符号链接
+follow_symlink = false
+#  运行二进制文件的完整命令
+full_bin = ""
+#  包含监听的目录
+include_dir = []
+#  包含监听的文件扩展名
+include_ext = ["go", "tpl", "tmpl", "html"]
+#  包含监听的文件
+include_file = []
+#  杀死进程前的延迟时间
+kill_delay = "0s"
+#  构建错误日志文件
+log = "build-errors.log"
+#  是否使用轮询方式监听文件变化
+poll = false
+#  轮询间隔（毫秒）
+poll_interval = 0
+#  是否在同一时间重新运行
+rerun = false
+#  重新运行延迟时间（毫秒）
+rerun_delay = 500
+#  是否发送中断信号
+send_interrupt = false
+#  是否在根目录停止
+stop_on_root = false
+
+#  终端颜色配置
+[color]
+#  应用程序输出颜色
+app = ""
+#  构建过程颜色
+build = "yellow"
+#  主进程颜色
+main = "magenta"
+#  运行器颜色
+runner = "green"
+#  文件监听器颜色
+watcher = "cyan"
+
+#  日志配置
+[log]
+#  是否只显示主要日志
+main_only = false
+#  是否显示时间戳
+time = false
+
+#  其他配置
+[misc]
+#  退出时是否清理临时文件
+clean_on_exit = false
+
+#  屏幕显示配置
+[screen]
+#  重建时是否清屏
+clear_on_rebuild = false
+#  是否保持滚动
+keep_scroll = true

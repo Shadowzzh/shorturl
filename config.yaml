@@ -1,0 +1,14 @@
+server:
+  port: "3001"
+  gin_mode: "debug"
+  domain: "localhost:3001/"
+
+database:
+  driver: "sqlite"
+  dsn: "shorturls.db"
+
+redis:
+  host: "localhost"
+  port: "6379"
+  password: ""
+  db: 0

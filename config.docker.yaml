@@ -1,0 +1,26 @@
+# 容器内使用的默认配置（被通用 docker-compose.yml 挂载为 /app/config.yaml）
+#
+# 这是给"在自己机器上跑一份"的默认值，任何值都可以用环境变量覆盖：
+#   SERVER_PORT、SERVER_GIN_MODE、SERVER_DOMAIN、DATABASE_DSN、REDIS_HOST、REDIS_PORT、REDIS_PASSWORD
+# 环境变量优先级高于本文件（见 config/config.go 的 AutomaticEnv）。
+#
+# 最常改的是 server.domain：它决定返回给你的 short_url 前缀。
+# 如果你通过反向代理对外提供服务，把它改成你的对外地址，例如：
+#   SERVER_DOMAIN=https://s.example.com/
+
+server:
+  port: "8087"
+  gin_mode: "release"
+  # 默认按"本机直连"给出；对外提供服务时用 SERVER_DOMAIN 覆盖
+  domain: "http://localhost:8087/"
+
+database:
+  driver: "sqlite"
+  dsn: "/data/shorturls.db"
+
+redis:
+  # redis 是 compose 里的服务名；单机直跑（非容器）时改成 localhost
+  host: "redis"
+  port: "6379"
+  password: ""
+  db: 0

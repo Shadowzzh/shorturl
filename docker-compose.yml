@@ -1,0 +1,56 @@
+# 一键本地/自托管部署（通用，不依赖任何特定基础设施）
+#
+#   docker compose up -d --build      # 启动（首次会构建镜像）
+#   docker compose logs -f short-url  # 看日志
+#   docker compose down               # 停止（保留数据卷）
+#
+# 默认监听 http://localhost:8087，数据存在命名卷里（删容器不丢数据）。
+# 常改的两个值（写进 .env 或直接 export）：
+#   SHORTURL_PORT=8087                     对外端口
+#   SHORTURL_DOMAIN=https://s.example.com/  对外域名，决定返回的 short_url 前缀（结尾必须带 /）
+#
+# 想改用外部已有的 Redis 或换数据库？直接用下面的 environment 覆盖，或编辑 config.docker.yaml。
+#
+# 项目名固定为 shorturl（会决定容器与卷的命名）。
+name: shorturl
+
+services:
+  redis:
+    image: redis:7.4-alpine
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - redis_data:/data
+
+  short-url:
+    build:
+      context: .
+    image: ${SHORTURL_IMAGE:-shorturl:local}
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      - "${SHORTURL_PORT:-8087}:8087"
+    environment:
+      # 容器内固定监听 8087；对外端口由上面的 publish 决定
+      SERVER_PORT: "8087"
+      SERVER_GIN_MODE: "release"
+      # 决定返回的 short_url 前缀；务必以 / 结尾
+      SERVER_DOMAIN: "${SHORTURL_DOMAIN:-http://localhost:8087/}"
+      DATABASE_DSN: "/data/shorturls.db"
+      REDIS_HOST: "redis"
+      REDIS_PORT: "6379"
+    volumes:
+      - shorturl_data:/data
+      # 只读挂载默认配置；上面的 environment 优先级更高（viper AutomaticEnv）
+      - ./config.docker.yaml:/app/config.yaml:ro
+
+volumes:
+  redis_data:
+  shorturl_data:
